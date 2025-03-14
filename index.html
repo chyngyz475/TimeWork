@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flip Clock</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="scripts.js">
+</head>
+<body>
+    <div class="background-glow"></div>
+    <canvas id="particleCanvas"></canvas>
+    <div class="container">
+        <div class="clock">
+            <div class="flip-card" id="minutes">
+                <div class="top">25</div>
+                <div class="bottom">25</div>
+            </div>
+            <div class="flip-card" id="seconds1">
+                <div class="top">00</div>
+                <div class="bottom">00</div>
+            </div>
+            <div class="flip-card" id="seconds2">
+                <div class="top">00</div>
+                <div class="bottom">00</div>
+            </div>
+        </div>
+        <button id="startButton">Start</button>
+        <div class="task-section">
+            <input type="text" id="taskInput" placeholder="Add a task...">
+            <button id="addTaskButton">Add Task</button>
+            <ul id="taskList"></ul>
+        </div>
+    </div>
+    <script src="scripts.js"></script>
+</body>
+</html>
