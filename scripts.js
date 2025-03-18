@@ -127,7 +127,6 @@ document.getElementById("pomodoroMode").addEventListener("click", () => {
     document.getElementById("pomodoroMode").textContent = isPomodoro ? "Выключить Помодоро" : "Включить Помодоро";
 });
 
-// Time selection buttons
 document.querySelectorAll(".time-btn").forEach(btn => {
     btn.addEventListener("click", () => {
         document.querySelectorAll(".time-btn").forEach(b => b.classList.remove("active"));
@@ -137,7 +136,6 @@ document.querySelectorAll(".time-btn").forEach(btn => {
     });
 });
 
-// Change background button
 document.getElementById("changeBackgroundBtn").addEventListener("click", () => {
     document.getElementById("backgroundUpload").click();
 });
@@ -153,7 +151,6 @@ document.getElementById("backgroundUpload").addEventListener("change", (e) => {
     }
 });
 
-// Task Management
 const taskInput = document.getElementById("taskInput");
 const addTaskButton = document.getElementById("addTaskButton");
 const taskList = document.getElementById("taskList");
@@ -252,7 +249,6 @@ function updateTaskProgress() {
     document.getElementById("taskProgress").textContent = `Задачи: ${completedTasks}/${totalTasks} (${progress}%)`;
 }
 
-// Hotkeys
 document.addEventListener("keydown", (e) => {
     if (e.code === "Space" && document.activeElement.tagName !== "INPUT") {
         e.preventDefault();
@@ -262,12 +258,10 @@ document.addEventListener("keydown", (e) => {
     }
 });
 
-// Help
 document.getElementById("helpBtn").addEventListener("click", () => {
     alert("Инструкции: Нажмите 'Start' для запуска таймера, добавляйте задачи в поле ввода и отмечайте их галочкой при выполнении. Используйте кнопки времени для выбора длительности, нажмите 'Поменять фон' для загрузки изображения, просмотрите историю задач.");
 });
 
-// History
 document.getElementById("historyBtn").addEventListener("click", () => {
     const historyPanel = document.getElementById("historyPanel");
     const historyList = document.getElementById("historyList");
@@ -279,7 +273,6 @@ document.getElementById("closeHistory").addEventListener("click", () => {
     document.getElementById("historyPanel").classList.add("hidden");
 });
 
-// Auto-save and restore
 function saveState() {
     localStorage.setItem("timerState", JSON.stringify({ timeLeft, tasks: Array.from(taskList.children).map(li => li.querySelector("label").textContent), history }));
 }
@@ -296,10 +289,8 @@ window.addEventListener("load", () => {
 
 setInterval(saveState, 5000);
 
-// Initial call
 updateTimer();
 
-// Resize
 window.addEventListener("resize", () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;

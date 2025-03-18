@@ -22,12 +22,11 @@
         <div class="container">
             <div class="timer-options">
                 <button class="time-btn" data-time="900">15 мин</button>
-                <button class="time-btn" data-time="1500" class="active">25 мин</button>
+                <button class="time-btn active" data-time="1500">25 мин</button>
                 <button class="time-btn" data-time="1800">30 мин</button>
                 <button class="time-btn" data-time="3600">60 мин</button>
                 <button id="changeBackgroundBtn">Поменять фон</button>
                 <input type="file" id="backgroundUpload" accept="image/*" style="display: none;">
-                <button id="historyBtn">История</button>
             </div>
             <div class="clock">
                 <div class="flip-card" id="minutes">
@@ -43,8 +42,10 @@
                     <div class="bottom">00</div>
                 </div>
             </div>
-            <button id="startButton">Start</button>
-            <button id="pomodoroMode">Включить Помодоро</button>
+            <div class="controls">
+                <button id="startButton">Start</button>
+                <button id="pomodoroMode">Включить Помодоро</button>
+            </div>
             <div class="task-section">
                 <input type="text" id="taskInput" placeholder="Добавить задачу...">
                 <button id="addTaskButton">Добавить</button>
