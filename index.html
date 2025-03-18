@@ -8,30 +8,58 @@
     <link rel="stylesheet" href="scripts.js">
 </head>
 <body>
-    <div class="background-glow"></div>
-    <canvas id="particleCanvas"></canvas>
-    <div class="container">
-        <div class="clock">
-            <div class="flip-card" id="minutes">
-                <div class="top">25</div>
-                <div class="bottom">25</div>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Flip Clock with Enhanced Features</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <div class="background-glow"></div>
+        <canvas id="particleCanvas"></canvas>
+        <div class="container">
+            <div class="timer-options">
+                <button class="time-btn" data-time="900">15 мин</button>
+                <button class="time-btn" data-time="1500" class="active">25 мин</button>
+                <button class="time-btn" data-time="1800">30 мин</button>
+                <button class="time-btn" data-time="3600">60 мин</button>
+                <button id="changeBackgroundBtn">Поменять фон</button>
+                <input type="file" id="backgroundUpload" accept="image/*" style="display: none;">
+                <button id="historyBtn">История</button>
             </div>
-            <div class="flip-card" id="seconds1">
-                <div class="top">00</div>
-                <div class="bottom">00</div>
+            <div class="clock">
+                <div class="flip-card" id="minutes">
+                    <div class="top">25</div>
+                    <div class="bottom">25</div>
+                </div>
+                <div class="flip-card" id="seconds1">
+                    <div class="top">00</div>
+                    <div class="bottom">00</div>
+                </div>
+                <div class="flip-card" id="seconds2">
+                    <div class="top">00</div>
+                    <div class="bottom">00</div>
+                </div>
             </div>
-            <div class="flip-card" id="seconds2">
-                <div class="top">00</div>
-                <div class="bottom">00</div>
+            <button id="startButton">Start</button>
+            <button id="pomodoroMode">Включить Помодоро</button>
+            <div class="task-section">
+                <input type="text" id="taskInput" placeholder="Добавить задачу...">
+                <button id="addTaskButton">Добавить</button>
+                <ul id="taskList"></ul>
+                <div id="taskProgress">Задачи: 0/0 (0%)</div>
+            </div>
+            <div id="helpBtn" title="Нажмите для помощи">?</div>
+            <div id="historyPanel" class="hidden">
+                <ul id="historyList"></ul>
+                <button id="closeHistory">Закрыть</button>
             </div>
         </div>
-        <button id="startButton">Start</button>
-        <div class="task-section">
-            <input type="text" id="taskInput" placeholder="Add a task...">
-            <button id="addTaskButton">Add Task</button>
-            <ul id="taskList"></ul>
-        </div>
-    </div>
+        <script src="scripts.js"></script>
+    </body>
+    </html>
     <script src="scripts.js"></script>
 </body>
 </html>

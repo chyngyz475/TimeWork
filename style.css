@@ -1,6 +1,6 @@
 body {
     margin: 0;
-    height: 100vh;
+    min-height: 100vh; /* Используем min-height для мобильных */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -8,9 +8,9 @@ body {
     font-family: Arial, sans-serif;
     overflow: hidden;
     position: relative;
+    touch-action: manipulation; /* Улучшение для тач-экранов */
 }
 
-/* Glowing Background */
 .background-glow {
     position: absolute;
     top: 0;
@@ -19,18 +19,16 @@ body {
     height: 100%;
     background: radial-gradient(circle, rgba(0, 150, 255, 0.3) 0%, rgba(0, 0, 0, 1) 70%);
     animation: glowPulse 5s infinite ease-in-out;
+    transition: background-image 0.5s ease;
+    background-size: cover; /* Адаптация фона */
+    background-position: center;
 }
 
 @keyframes glowPulse {
-    0%, 100% {
-        opacity: 0.8;
-    }
-    50% {
-        opacity: 0.4;
-    }
+    0%, 100% { opacity: 0.8; }
+    50% { opacity: 0.4; }
 }
 
-/* Particle Canvas */
 #particleCanvas {
     position: absolute;
     top: 0;
@@ -43,22 +41,143 @@ body {
 .container {
     text-align: center;
     z-index: 1;
+    position: relative;
+    padding: 10px; /* Дополнительное пространство на мобильных */
+}
+
+.timer-options {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap; /* Адаптация для мобильных */
+    justify-content: center;
+}
+
+.time-btn {
+    padding: 10px 15px;
+    font-size: 14px;
+    cursor: pointer;
+    background: #444;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    transition: background 0.3s ease;
+}
+
+.time-btn.active, .time-btn:hover {
+    background: #666;
+}
+
+#changeBackgroundBtn {
+    padding: 10px 15px;
+    font-size: 14px;
+    cursor: pointer;
+    background: #444;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    transition: background 0.3s ease;
+}
+
+#changeBackgroundBtn:hover {
+    background: #666;
+}
+
+#backgroundUpload {
+    display: none;
+}
+
+#historyBtn {
+    padding: 10px 15px;
+    font-size: 14px;
+    cursor: pointer;
+    background: #444;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    transition: background 0.3s ease;
+}
+
+#historyBtn:hover {
+    background: #666;
+}
+
+#historyPanel {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #222;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    z-index: 2;
+    color: #fff;
+    max-width: 90%; /* Адаптация для мобильных */
+    overflow-y: auto;
+}
+
+#historyPanel.hidden {
+    display: none;
+}
+
+#historyList {
+    list-style: none;
+    padding: 0;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+#closeHistory {
+    padding: 10px 15px;
+    font-size: 14px;
+    cursor: pointer;
+    background: #ff4444;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+#closeHistory:hover {
+    background: #cc0000;
+}
+
+#helpBtn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    background: #4CAF50;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease;
+}
+
+#helpBtn:hover {
+    transform: scale(1.1);
 }
 
 .clock {
     display: flex;
-    gap: 15px;
-    margin-bottom: 30px;
+    gap: 10px;
+    margin-bottom: 20px;
 }
 
 .flip-card {
     position: relative;
-    width: 120px;
-    height: 180px;
-    border-radius: 15px;
+    width: 100px; /* Уменьшен для мобильных */
+    height: 150px; /* Уменьшен для мобильных */
+    border-radius: 10px;
     overflow: hidden;
     perspective: 1000px;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
     background: linear-gradient(145deg, #333, #222);
 }
 
@@ -70,7 +189,7 @@ body {
     justify-content: center;
     align-items: center;
     color: #fff;
-    font-size: 70px;
+    font-size: 50px; /* Уменьшен для мобильных */
     font-weight: bold;
     background-color: #222;
     transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55), background-color 0.6s ease-in-out;
@@ -109,10 +228,9 @@ body {
     transform: rotateX(90deg);
 }
 
-/* Button Styling with Animation */
 button {
-    padding: 15px 30px;
-    font-size: 20px;
+    padding: 12px 25px;
+    font-size: 16px;
     font-weight: bold;
     cursor: pointer;
     background: linear-gradient(90deg, #4CAF50, #2e7d32);
@@ -133,26 +251,25 @@ button:active {
     transform: scale(0.95);
 }
 
-/* Task Section Styling */
 .task-section {
-    margin-top: 20px;
+    margin-top: 15px;
 }
 
 #taskInput {
-    padding: 10px;
-    font-size: 16px;
-    width: 250px;
+    padding: 8px;
+    font-size: 14px;
+    width: 200px;
     border: none;
     border-radius: 5px;
-    margin-right: 10px;
+    margin-right: 8px;
     background-color: #222;
     color: #fff;
     outline: none;
 }
 
 #addTaskButton {
-    padding: 10px 20px;
-    font-size: 16px;
+    padding: 8px 15px;
+    font-size: 14px;
     cursor: pointer;
     background: linear-gradient(90deg, #4CAF50, #2e7d32);
     color: white;
@@ -169,14 +286,14 @@ button:active {
     list-style: none;
     padding: 0;
     margin-top: 10px;
-    max-height: 200px;
+    max-height: 150px;
     overflow-y: auto;
 }
 
 .task-item {
     display: flex;
     align-items: center;
-    padding: 10px;
+    padding: 8px;
     background: #2a2a2a;
     margin: 5px 0;
     border-radius: 5px;
@@ -192,16 +309,20 @@ button:active {
     overflow: hidden;
 }
 
+.task-item[draggable="true"] {
+    cursor: move;
+}
+
 .task-item input[type="checkbox"] {
-    margin-right: 10px;
+    margin-right: 8px;
     cursor: pointer;
-    transform: scale(1.5);
+    transform: scale(1.3); /* Уменьшен для мобильных */
 }
 
 .task-item .delete-btn {
     margin-left: auto;
-    padding: 5px 10px;
-    font-size: 14px;
+    padding: 4px 8px;
+    font-size: 12px;
     cursor: pointer;
     background: #ff4444;
     color: white;
@@ -213,4 +334,21 @@ button:active {
 .task-item .delete-btn:hover {
     transform: scale(1.1);
     background: #cc0000;
+}
+
+#taskProgress {
+    margin-top: 10px;
+    color: #fff;
+    font-size: 14px;
+}
+
+@media (max-width: 600px) {
+    .clock { flex-direction: column; align-items: center; }
+    .flip-card { width: 70px; height: 100px; }
+    .top, .bottom { font-size: 40px; }
+    button { padding: 8px 15px; font-size: 14px; }
+    #taskInput { width: 120px; }
+    .timer-options { flex-direction: column; gap: 5px; }
+    #historyPanel { max-width: 80%; }
+    #helpBtn { bottom: 10px; right: 10px; width: 30px; height: 30px; font-size: 16px; }
 }
