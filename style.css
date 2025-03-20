@@ -204,7 +204,7 @@ body {
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: -42px;
+    gap: 10px; /* Исправлен отрицательный gap */
     margin-bottom: 20px;
     flex-wrap: nowrap;
     justify-content: center;
@@ -293,6 +293,15 @@ button:hover {
 
 button:active {
     transform: scale(0.95);
+}
+
+/* Анимация сдвига кнопки */
+#startButton {
+    transition: margin-left 0.5s ease; /* Плавный переход для margin-left */
+}
+
+#startButton.shifted {
+    margin-left: 160px; /* Сдвиг влево на 160px */
 }
 
 .task-section {
@@ -425,7 +434,10 @@ button:active {
 @media screen and (min-width: 601px) and (max-width: 2024px) {
     .clock { gap: 10px; }
 }
-@media  screen and (min-width: 301px) and (max-width: 4096px) {
-    #startButton { margin-left: 160px; }
-    
+
+/* Применяем сдвиг только для указанных размеров экрана */
+@media screen and (min-width: 301px) and (max-width: 4096px) {
+    #startButton.shifted {
+        margin-left: 160px;
+    }
 }

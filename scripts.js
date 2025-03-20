@@ -68,6 +68,7 @@ function updateTimer() {
             timerId = null;
             isPaused = false;
             document.getElementById("startButton").textContent = "Start";
+            document.getElementById("startButton").classList.remove("shifted"); // Убираем сдвиг
             showHideableElements();
             alert("Таймер закончен!");
             return;
@@ -131,6 +132,7 @@ document.getElementById("startButton").addEventListener("click", () => {
         // Старт таймера
         timerId = setInterval(updateTimer, 1000);
         document.getElementById("startButton").textContent = "Pause";
+        document.getElementById("startButton").classList.add("shifted"); // Добавляем сдвиг
         hideHideableElements();
     } else if (timerId && !isPaused) {
         // Пауза
@@ -138,11 +140,13 @@ document.getElementById("startButton").addEventListener("click", () => {
         timerId = null;
         isPaused = true;
         document.getElementById("startButton").textContent = "Resume";
+        document.getElementById("startButton").classList.remove("shifted"); // Убираем сдвиг
     } else if (isPaused) {
         // Возобновление
         timerId = setInterval(updateTimer, 1000);
         isPaused = false;
         document.getElementById("startButton").textContent = "Pause";
+        document.getElementById("startButton").classList.add("shifted"); // Добавляем сдвиг
     }
 });
 
@@ -328,6 +332,3 @@ if ('serviceWorker' in navigator) {
         .then(() => console.log('Service Worker registered'))
         .catch((error) => console.error('Service Worker registration failed:', error));
 }
-
-document.getElementById("startButton").classList.add("pause"); // При старте
-document.getElementById("startButton").classList.remove("pause"); // При паузе или окончании
