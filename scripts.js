@@ -5,6 +5,7 @@ let workTime = 25 * 60;
 let breakTime = 5 * 60;
 let currentPhase = "work";
 let history = [];
+let isPaused = false;
 
 const canvas = document.getElementById("particleCanvas");
 const ctx = canvas.getContext("2d");
@@ -64,6 +65,10 @@ function updateTimer() {
             alert(`Перерыв! (${currentPhase === "work" ? "Работа" : "Отдых"} начинается)`);
         } else {
             clearInterval(timerId);
+            timerId = null;
+            isPaused = false;
+            document.getElementById("startButton").textContent = "Start";
+            showHideableElements();
             alert("Таймер закончен!");
             return;
         }
@@ -108,14 +113,36 @@ function updateDigit(elementId, newValue) {
     }
 }
 
+// Функции для скрытия и показа элементов
+function hideHideableElements() {
+    document.querySelectorAll('.hideable').forEach(element => {
+        element.classList.add('hidden');
+    });
+}
+
+function showHideableElements() {
+    document.querySelectorAll('.hideable').forEach(element => {
+        element.classList.remove('hidden');
+    });
+}
+
 document.getElementById("startButton").addEventListener("click", () => {
-    if (!timerId) {
+    if (!timerId && !isPaused) {
+        // Старт таймера
         timerId = setInterval(updateTimer, 1000);
-        document.getElementById("startButton").textContent = "Stop";
-    } else {
+        document.getElementById("startButton").textContent = "Pause";
+        hideHideableElements();
+    } else if (timerId && !isPaused) {
+        // Пауза
         clearInterval(timerId);
         timerId = null;
-        document.getElementById("startButton").textContent = "Start";
+        isPaused = true;
+        document.getElementById("startButton").textContent = "Resume";
+    } else if (isPaused) {
+        // Возобновление
+        timerId = setInterval(updateTimer, 1000);
+        isPaused = false;
+        document.getElementById("startButton").textContent = "Pause";
     }
 });
 
@@ -295,3 +322,12 @@ window.addEventListener("resize", () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 });
+
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/service-worker.js')
+        .then(() => console.log('Service Worker registered'))
+        .catch((error) => console.error('Service Worker registration failed:', error));
+}
+
+document.getElementById("startButton").classList.add("pause"); // При старте
+document.getElementById("startButton").classList.remove("pause"); // При паузе или окончании
