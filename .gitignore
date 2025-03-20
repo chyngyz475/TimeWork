@@ -14,3 +14,13 @@ yarn-error.log
 package-lock.json
 yarn.lock
 ```
+debug.log
+```
+2021-06-02T14:00:00.000Z
+```
+I have tried to add the following to the .gitignore file:
+```
+npm-debug.log
+```
+But it still shows up in the git status. I have also tried to add the following to the .gitignore file:
+```
