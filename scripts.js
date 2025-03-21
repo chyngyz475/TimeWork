@@ -68,7 +68,7 @@ function updateTimer() {
             timerId = null;
             isPaused = false;
             document.getElementById("startButton").textContent = "Start";
-            document.getElementById("startButton").classList.remove("shifted"); // Убираем сдвиг
+            document.getElementById("startButton").classList.remove("shifted");
             showHideableElements();
             alert("Таймер закончен!");
             return;
@@ -132,7 +132,7 @@ document.getElementById("startButton").addEventListener("click", () => {
         // Старт таймера
         timerId = setInterval(updateTimer, 1000);
         document.getElementById("startButton").textContent = "Pause";
-        document.getElementById("startButton").classList.add("shifted"); // Добавляем сдвиг
+        document.getElementById("startButton").classList.add("shifted");
         hideHideableElements();
     } else if (timerId && !isPaused) {
         // Пауза
@@ -140,13 +140,15 @@ document.getElementById("startButton").addEventListener("click", () => {
         timerId = null;
         isPaused = true;
         document.getElementById("startButton").textContent = "Resume";
-        document.getElementById("startButton").classList.remove("shifted"); // Убираем сдвиг
+        document.getElementById("startButton").classList.remove("shifted");
+        showHideableElements(); // Показываем элементы при паузе
     } else if (isPaused) {
         // Возобновление
         timerId = setInterval(updateTimer, 1000);
         isPaused = false;
         document.getElementById("startButton").textContent = "Pause";
-        document.getElementById("startButton").classList.add("shifted"); // Добавляем сдвиг
+        document.getElementById("startButton").classList.add("shifted");
+        hideHideableElements(); // Скрываем элементы при возобновлении
     }
 });
 

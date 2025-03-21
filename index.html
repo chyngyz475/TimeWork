@@ -8,64 +8,51 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="manifest" href="/manifest.json">
     <link rel="apple-touch-icon" href="/icon.png">
-    <title>Flip Clock</title>
+    <title>Flip Clock Timer</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="scripts.js">
 </head>
 <body>
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Flip Clock with Enhanced Features</title>
-        <link rel="stylesheet" href="style.css">
-    </head>
-    <body>
-        <div class="background-glow"></div>
-        <canvas id="particleCanvas"></canvas>
-        <div class="container">
-            <div class="timer-options hideable">
-                <button class="time-btn" data-time="900">15 мин</button>
-                <button class="time-btn active" data-time="1500">25 мин</button>
-                <button class="time-btn" data-time="1800">30 мин</button>
-                <button class="time-btn" data-time="3600">60 мин</button>
-                <button id="changeBackgroundBtn">Поменять фон</button>
-                <input type="file" id="backgroundUpload" accept="image/*" style="display: none;">
+    <div class="background-glow"></div>
+    <canvas id="particleCanvas"></canvas>
+    <div class="container">
+        <div class="timer-options hideable">
+            <button class="time-btn" data-time="900">15 мин</button>
+            <button class="time-btn active" data-time="1500">25 мин</button>
+            <button class="time-btn" data-time="1800">30 мин</button>
+            <button class="time-btn" data-time="3600">60 мин</button>
+            <button id="changeBackgroundBtn">Поменять фон</button>
+            <input type="file" id="backgroundUpload" accept="image/*" style="display: none;">
+        </div>
+        <div class="clock">
+            <div class="flip-card" id="minutes">
+                <div class="top">25</div>
+                <div class="bottom">25</div>
             </div>
-            <div class="clock">
-                <div class="flip-card" id="minutes">
-                    <div class="top">25</div>
-                    <div class="bottom">25</div>
-                </div>
-                <div class="flip-card" id="seconds1">
-                    <div class="top">00</div>
-                    <div class="bottom">00</div>
-                </div>
-                <div class="flip-card" id="seconds2">
-                    <div class="top">00</div>
-                    <div class="bottom">00</div>
-                </div>
+            <div class="flip-card" id="seconds1">
+                <div class="top">00</div>
+                <div class="bottom">00</div>
             </div>
-            <div class="controls">
-                <button id="startButton">Start</button>
-                <button id="pomodoroMode" class="hideable">Включить Помодоро</button>
-            </div>
-            <div class="task-section hideable">
-                <input type="text" id="taskInput" placeholder="Добавить задачу...">
-                <button id="addTaskButton">Добавить</button>
-                <ul id="taskList"></ul>
-                <div id="taskProgress">Задачи: 0/0 (0%)</div>
-            </div>
-            <div id="helpBtn" class="hideable" title="Нажмите для помощи">?</div>
-            <div id="historyPanel" class="hidden">
-                <ul id="historyList"></ul>
-                <button id="closeHistory">Закрыть</button>
+            <div class="flip-card" id="seconds2">
+                <div class="top">00</div>
+                <div class="bottom">00</div>
             </div>
         </div>
-        <script src="scripts.js"></script>
-    </body>
-    </html>
+        <div class="controls">
+            <button id="startButton">Start</button>
+            <button id="pomodoroMode" class="hideable">Включить Помодоро</button>
+        </div>
+        <div class="task-section hideable">
+            <input type="text" id="taskInput" placeholder="Добавить задачу...">
+            <button id="addTaskButton">Добавить</button>
+            <ul id="taskList"></ul>
+            <div id="taskProgress">Задачи: 0/0 (0%)</div>
+        </div>
+        <div id="helpBtn" class="hideable" title="Нажмите для помощи">?</div>
+        <div id="historyPanel" class="hidden">
+            <ul id="historyList"></ul>
+            <button id="closeHistory">Закрыть</button>
+        </div>
+    </div>
     <script src="scripts.js"></script>
 </body>
 </html>

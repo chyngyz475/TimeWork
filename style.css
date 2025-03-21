@@ -441,3 +441,30 @@ button:active {
         margin-left: 160px;
     }
 }
+
+
+/* Скрытие элементов с анимацией */
+.hideable {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.hideable.hidden {
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
+}
+
+/* Анимация сдвига кнопки */
+#startButton {
+    transition: margin-left 0.5s ease;
+}
+
+#startButton.shifted {
+    margin-left: 160px;
+}
+
+@media screen and (min-width: 301px) and (max-width: 4096px) {
+    #startButton.shifted {
+        margin-left: 160px;
+    }
+}
