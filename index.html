@@ -60,34 +60,21 @@
             <input type="file" id="backgroundUpload" accept="image/*" style="display: none;">
         </div>
 
-        <!-- Enhanced Clock Display -->
-        <div class="clock-container">
-        <div class="clock">
-            <div class="flip-card" id="minutes">
-                <div class="top">25</div>
-                <div class="bottom">25</div>
-            </div>
-                <div class="clock-separator">:</div>
-            <div class="flip-card" id="seconds1">
-                <div class="top">00</div>
-                <div class="bottom">00</div>
-            </div>
-            <div class="flip-card" id="seconds2">
-                <div class="top">00</div>
-                <div class="bottom">00</div>
-            </div>
-        </div>
-            <div class="progress-ring">
-                <svg class="progress-ring-svg" width="200" height="200">
-                    <defs>
-                        <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                            <stop offset="0%" style="stop-color:#6366f1"/>
-                            <stop offset="100%" style="stop-color:#a855f7"/>
-                        </linearGradient>
-                    </defs>
-                    <circle class="progress-ring-circle-bg" cx="100" cy="100" r="90"/>
-                    <circle class="progress-ring-circle" cx="100" cy="100" r="90" id="progressCircle"/>
-                </svg>
+        <!-- Material 3 Timer Display -->
+        <div class="timer-container">
+            <div class="circular-timer">
+                <div class="timer-circle" id="timerCircle">
+                    <div class="progress-ring">
+                        <svg class="progress-ring-svg">
+                            <circle class="progress-ring-circle-bg" cx="140" cy="140" r="130"/>
+                            <circle class="progress-ring-circle" cx="140" cy="140" r="130" id="progressCircle"/>
+                        </svg>
+                    </div>
+                    <div class="timer-display">
+                        <div class="timer-time" id="timerTime">25:00</div>
+                        <div class="timer-mode" id="timerMode">Фокус</div>
+                    </div>
+                </div>
             </div>
         </div>
 

@@ -80,6 +80,7 @@ function updateTimer() {
             
             // Обновляем индикатор фазы
             updatePhaseIndicator();
+            updateTimerMode();
             
             // Начинаем новую сессию
             sessionStartTime = Date.now();
@@ -115,6 +116,7 @@ function updateTimer() {
             document.getElementById("startButton").classList.remove("shifted");
             showHideableElements();
             updatePhaseIndicator();
+            updateTimerMode();
             return;
         }
     }
@@ -126,11 +128,10 @@ function updateTimer() {
 
     const minutes = Math.floor(timeLeft / 60);
     const seconds = timeLeft % 60;
-
-    updateDigit("minutes", String(minutes).padStart(2, '0'));
-    const secondsStr = String(seconds).padStart(2, '0');
-    updateDigit("seconds1", secondsStr[0] || '0');
-    updateDigit("seconds2", secondsStr[1] || '0');
+    const timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    
+    // Обновляем отображение времени
+    document.getElementById('timerTime').textContent = timeString;
 
     // Обновляем прогресс-кольцо
     updateProgressRing();
@@ -182,6 +183,40 @@ function updatePhaseIndicator() {
     }
 }
 
+// Обновление режима таймера
+function updateTimerMode() {
+    const timerCircle = document.getElementById('timerCircle');
+    const timerMode = document.getElementById('timerMode');
+    
+    if (!timerCircle || !timerMode) return;
+    
+    // Убираем все классы режимов
+    timerCircle.classList.remove('focus', 'break-short', 'break-long');
+    
+    if (timerId) {
+        if (isPomodoro) {
+            if (currentPhase === "work") {
+                timerCircle.classList.add('focus');
+                timerMode.textContent = "Фокус";
+            } else {
+                // Определяем тип перерыва по длительности
+                if (breakTime <= 300) { // 5 минут или меньше
+                    timerCircle.classList.add('break-short');
+                    timerMode.textContent = "Короткий перерыв";
+                } else {
+                    timerCircle.classList.add('break-long');
+                    timerMode.textContent = "Длинный перерыв";
+                }
+            }
+        } else {
+            timerCircle.classList.add('focus');
+            timerMode.textContent = "Работа";
+        }
+    } else {
+        timerMode.textContent = "Готов к работе";
+    }
+}
+
 // Обновление прогресс-кольца
 function updateProgressRing() {
     const progressCircle = document.getElementById('progressCircle');
@@ -191,7 +226,7 @@ function updateProgressRing() {
     const elapsed = totalTime - timeLeft;
     const progress = elapsed / totalTime;
     
-    const circumference = 2 * Math.PI * 90; // радиус 90
+    const circumference = 2 * Math.PI * 130; // радиус 130
     const offset = circumference - (progress * circumference);
     
     progressCircle.style.strokeDashoffset = offset;
@@ -406,17 +441,97 @@ function updateTaskProgress() {
     document.getElementById("taskProgress").textContent = `Задачи: ${completedTasks}/${totalTasks} (${progress}%)`;
 }
 
+// Hotkeys для разработчиков
 document.addEventListener("keydown", (e) => {
-    if (e.code === "Space" && document.activeElement.tagName !== "INPUT") {
-        e.preventDefault();
-        document.getElementById("startButton").click();
-    } else if (e.code === "Enter" && document.getElementById("taskInput") === document.activeElement) {
-        document.getElementById("addTaskButton").click();
+    // Игнорируем если фокус на input элементах
+    if (document.activeElement.tagName === "INPUT" || document.activeElement.tagName === "TEXTAREA") {
+        if (e.code === "Enter" && document.getElementById("taskInput") === document.activeElement) {
+            document.getElementById("addTaskButton").click();
+        }
+        return;
+    }
+    
+    switch (e.code) {
+        case "Space":
+            e.preventDefault();
+            document.getElementById("startButton").click();
+            break;
+        case "KeyR":
+            e.preventDefault();
+            // Рестарт таймера
+            if (timerId) {
+                clearInterval(timerId);
+                timerId = null;
+                isPaused = false;
+                sessionStartTime = null;
+                totalSessionTime = 0;
+                
+                document.getElementById("startButton").innerHTML = `
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M8 5v14l11-7z"/>
+                    </svg>
+                    <span>Старт</span>
+                `;
+                document.getElementById("startButton").classList.remove("shifted");
+                showHideableElements();
+                updatePhaseIndicator();
+                updateTimerMode();
+            }
+            break;
+        case "KeyP":
+            e.preventDefault();
+            // Переключение режима Помодоро
+            document.getElementById("pomodoroMode").click();
+            break;
+        case "Digit1":
+            e.preventDefault();
+            document.querySelector('[data-time="900"]').click();
+            break;
+        case "Digit2":
+            e.preventDefault();
+            document.querySelector('[data-time="1500"]').click();
+            break;
+        case "Digit3":
+            e.preventDefault();
+            document.querySelector('[data-time="1800"]').click();
+            break;
+        case "Digit4":
+            e.preventDefault();
+            document.querySelector('[data-time="3600"]').click();
+            break;
+        case "KeyH":
+            e.preventDefault();
+            // Показать/скрыть помощь
+            document.getElementById("helpBtn").click();
+            break;
     }
 });
 
 document.getElementById("helpBtn").addEventListener("click", () => {
-    alert("Инструкции: Нажмите 'Start' для запуска таймера, добавляйте задачи в поле ввода и отмечайте их галочкой при выполнении. Используйте кнопки времени для выбора длительности, нажмите 'Поменять фон' для загрузки изображения, просмотрите историю задач.");
+    const helpText = `
+🎯 TimeWork - Умный Таймер
+
+📋 Основные функции:
+• Нажмите 'Старт' для запуска таймера
+• Добавляйте задачи и отмечайте выполненные
+• Выбирайте длительность сессий
+• Отслеживайте прогресс в профиле
+
+⌨️ Горячие клавиши:
+• Пробел - Старт/Пауза
+• R - Рестарт таймера
+• P - Переключить Помодоро
+• 1-4 - Быстрый выбор времени (15/25/30/60 мин)
+• H - Показать эту справку
+
+🎨 Особенности:
+• Автоматическая смена цветов по режимам
+• Плавные анимации и переходы
+• Адаптивный дизайн для всех устройств
+• Поддержка темной темы
+    `;
+    
+    alert(helpText);
 });
 
 document.getElementById("historyBtn").addEventListener("click", () => {
@@ -446,8 +561,17 @@ window.addEventListener("load", () => {
     // Инициализация индикатора фазы
     updatePhaseIndicator();
     
+    // Инициализация режима таймера
+    updateTimerMode();
+    
     // Инициализация прогресс-кольца
     updateProgressRing();
+    
+    // Инициализация отображения времени
+    const minutes = Math.floor(timeLeft / 60);
+    const seconds = timeLeft % 60;
+    const timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    document.getElementById('timerTime').textContent = timeString;
 });
 
 setInterval(saveState, 5000);
