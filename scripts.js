@@ -6,6 +6,8 @@ let breakTime = 5 * 60;
 let currentPhase = "work";
 let history = [];
 let isPaused = false;
+let sessionStartTime = null;
+let totalSessionTime = 0;
 
 const canvas = document.getElementById("particleCanvas");
 const ctx = canvas.getContext("2d");
@@ -59,20 +61,50 @@ animateParticles();
 
 function updateTimer() {
     if (timeLeft <= 0) {
+        // Завершаем текущую сессию
+        if (sessionStartTime && totalSessionTime > 0) {
+            const sessionType = currentPhase === "work" ? "work" : "break";
+            if (typeof addSession === 'function') {
+                addSession(sessionType, totalSessionTime);
+            }
+        }
+        
         if (isPomodoro) {
             currentPhase = currentPhase === "work" ? "break" : "work";
             timeLeft = currentPhase === "work" ? workTime : breakTime;
+            
+            // Обновляем индикатор фазы
+            updatePhaseIndicator();
+            
+            // Начинаем новую сессию
+            sessionStartTime = Date.now();
+            totalSessionTime = 0;
+            
             alert(`Перерыв! (${currentPhase === "work" ? "Работа" : "Отдых"} начинается)`);
         } else {
             clearInterval(timerId);
             timerId = null;
             isPaused = false;
-            document.getElementById("startButton").textContent = "Start";
+            sessionStartTime = null;
+            totalSessionTime = 0;
+            
+            document.getElementById("startButton").innerHTML = `
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M8 5v14l11-7z"/>
+                </svg>
+                <span>Старт</span>
+            `;
             document.getElementById("startButton").classList.remove("shifted");
             showHideableElements();
+            updatePhaseIndicator();
             alert("Таймер закончен!");
             return;
         }
+    }
+
+    // Обновляем время сессии
+    if (sessionStartTime) {
+        totalSessionTime = Math.floor((Date.now() - sessionStartTime) / 1000);
     }
 
     const minutes = Math.floor(timeLeft / 60);
@@ -82,6 +114,9 @@ function updateTimer() {
     const secondsStr = String(seconds).padStart(2, '0');
     updateDigit("seconds1", secondsStr[0] || '0');
     updateDigit("seconds2", secondsStr[1] || '0');
+
+    // Обновляем прогресс-кольцо
+    updateProgressRing();
 
     timeLeft--;
     saveState();
@@ -114,6 +149,37 @@ function updateDigit(elementId, newValue) {
     }
 }
 
+// Обновление индикатора текущей фазы
+function updatePhaseIndicator() {
+    const phaseElement = document.getElementById('currentPhase');
+    if (!phaseElement) return;
+    
+    if (timerId) {
+        if (isPomodoro) {
+            phaseElement.textContent = currentPhase === "work" ? "Работа" : "Отдых";
+        } else {
+            phaseElement.textContent = "Работа";
+        }
+    } else {
+        phaseElement.textContent = "Готов к работе";
+    }
+}
+
+// Обновление прогресс-кольца
+function updateProgressRing() {
+    const progressCircle = document.getElementById('progressCircle');
+    if (!progressCircle) return;
+    
+    const totalTime = isPomodoro ? (currentPhase === "work" ? workTime : breakTime) : timeLeft + totalSessionTime;
+    const elapsed = totalTime - timeLeft;
+    const progress = elapsed / totalTime;
+    
+    const circumference = 2 * Math.PI * 90; // радиус 90
+    const offset = circumference - (progress * circumference);
+    
+    progressCircle.style.strokeDashoffset = offset;
+}
+
 // Функции для скрытия и показа элементов
 function hideHideableElements() {
     document.querySelectorAll('.hideable').forEach(element => {
@@ -131,24 +197,47 @@ document.getElementById("startButton").addEventListener("click", () => {
     if (!timerId && !isPaused) {
         // Старт таймера
         timerId = setInterval(updateTimer, 1000);
-        document.getElementById("startButton").textContent = "Pause";
+        sessionStartTime = Date.now();
+        totalSessionTime = 0;
+        
+        document.getElementById("startButton").innerHTML = `
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+            </svg>
+            <span>Пауза</span>
+        `;
         document.getElementById("startButton").classList.add("shifted");
         hideHideableElements();
+        updatePhaseIndicator();
     } else if (timerId && !isPaused) {
         // Пауза
         clearInterval(timerId);
         timerId = null;
         isPaused = true;
-        document.getElementById("startButton").textContent = "Resume";
+        
+        document.getElementById("startButton").innerHTML = `
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M8 5v14l11-7z"/>
+            </svg>
+            <span>Продолжить</span>
+        `;
         document.getElementById("startButton").classList.remove("shifted");
         showHideableElements(); // Показываем элементы при паузе
+        updatePhaseIndicator();
     } else if (isPaused) {
         // Возобновление
         timerId = setInterval(updateTimer, 1000);
         isPaused = false;
-        document.getElementById("startButton").textContent = "Pause";
+        
+        document.getElementById("startButton").innerHTML = `
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+            </svg>
+            <span>Пауза</span>
+        `;
         document.getElementById("startButton").classList.add("shifted");
         hideHideableElements(); // Скрываем элементы при возобновлении
+        updatePhaseIndicator();
     }
 });
 
@@ -157,7 +246,15 @@ document.getElementById("pomodoroMode").addEventListener("click", () => {
     timeLeft = isPomodoro ? workTime : timeLeft;
     currentPhase = "work";
     updateTimer();
-    document.getElementById("pomodoroMode").textContent = isPomodoro ? "Выключить Помодоро" : "Включить Помодоро";
+    updatePhaseIndicator();
+    
+    const pomodoroBtn = document.getElementById("pomodoroMode");
+    pomodoroBtn.innerHTML = `
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+        </svg>
+        <span>${isPomodoro ? "Выключить Помодоро" : "Включить Помодоро"}</span>
+    `;
 });
 
 document.querySelectorAll(".time-btn").forEach(btn => {
@@ -318,6 +415,12 @@ window.addEventListener("load", () => {
         history = state.history || [];
         updateTimer();
     }
+    
+    // Инициализация индикатора фазы
+    updatePhaseIndicator();
+    
+    // Инициализация прогресс-кольца
+    updateProgressRing();
 });
 
 setInterval(saveState, 5000);

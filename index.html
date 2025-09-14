@@ -1,56 +1,160 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#4CAF50">
+    <meta name="theme-color" content="#6366f1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Flip Clock Timer</title>
+    <title>TimeWork - Умный Таймер</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="background-glow"></div>
     <canvas id="particleCanvas"></canvas>
+    
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <h1 class="app-title">TimeWork</h1>
+            <div class="status-indicator">
+                <span id="currentPhase">Готов к работе</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
     <div class="container">
+        <!-- Timer Options -->
         <div class="timer-options hideable">
-            <button class="time-btn" data-time="900">15 мин</button>
-            <button class="time-btn active" data-time="1500">25 мин</button>
-            <button class="time-btn" data-time="1800">30 мин</button>
-            <button class="time-btn" data-time="3600">60 мин</button>
-            <button id="changeBackgroundBtn">Поменять фон</button>
+            <div class="time-presets">
+                <button class="time-btn" data-time="900">
+                    <span class="time-value">15</span>
+                    <span class="time-label">мин</span>
+                </button>
+                <button class="time-btn active" data-time="1500">
+                    <span class="time-value">25</span>
+                    <span class="time-label">мин</span>
+                </button>
+                <button class="time-btn" data-time="1800">
+                    <span class="time-value">30</span>
+                    <span class="time-label">мин</span>
+                </button>
+                <button class="time-btn" data-time="3600">
+                    <span class="time-value">60</span>
+                    <span class="time-label">мин</span>
+                </button>
+            </div>
+            <button id="changeBackgroundBtn" class="settings-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                </svg>
+                Фон
+            </button>
             <input type="file" id="backgroundUpload" accept="image/*" style="display: none;">
         </div>
-        <div class="clock">
-            <div class="flip-card" id="minutes">
-                <div class="top">25</div>
-                <div class="bottom">25</div>
+
+        <!-- Enhanced Clock Display -->
+        <div class="clock-container">
+            <div class="clock">
+                <div class="flip-card" id="minutes">
+                    <div class="top">25</div>
+                    <div class="bottom">25</div>
+                </div>
+                <div class="clock-separator">:</div>
+                <div class="flip-card" id="seconds1">
+                    <div class="top">00</div>
+                    <div class="bottom">00</div>
+                </div>
+                <div class="flip-card" id="seconds2">
+                    <div class="top">00</div>
+                    <div class="bottom">00</div>
+                </div>
             </div>
-            <div class="flip-card" id="seconds1">
-                <div class="top">00</div>
-                <div class="bottom">00</div>
-            </div>
-            <div class="flip-card" id="seconds2">
-                <div class="top">00</div>
-                <div class="bottom">00</div>
+            <div class="progress-ring">
+                <svg class="progress-ring-svg" width="200" height="200">
+                    <defs>
+                        <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:#6366f1"/>
+                            <stop offset="100%" style="stop-color:#a855f7"/>
+                        </linearGradient>
+                    </defs>
+                    <circle class="progress-ring-circle-bg" cx="100" cy="100" r="90"/>
+                    <circle class="progress-ring-circle" cx="100" cy="100" r="90" id="progressCircle"/>
+                </svg>
             </div>
         </div>
+
+        <!-- Controls -->
         <div class="controls">
-            <button id="startButton">Start</button>
-            <button id="pomodoroMode" class="hideable">Включить Помодоро</button>
+            <button id="startButton" class="main-control-btn">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M8 5v14l11-7z"/>
+                </svg>
+                <span>Старт</span>
+            </button>
+            <button id="pomodoroMode" class="secondary-btn hideable">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                </svg>
+                <span>Помодоро</span>
+            </button>
         </div>
+
+        <!-- Task Section -->
         <div class="task-section hideable">
-            <input type="text" id="taskInput" placeholder="Добавить задачу...">
-            <button id="addTaskButton">Добавить</button>
-            <ul id="taskList"></ul>
-            <div id="taskProgress">Задачи: 0/0 (0%)</div>
+            <div class="task-input-container">
+                <input type="text" id="taskInput" placeholder="Добавить задачу...">
+                <button id="addTaskButton" class="add-task-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                    </svg>
+                </button>
+            </div>
+            <ul id="taskList" class="task-list"></ul>
+            <div id="taskProgress" class="task-progress">Задачи: 0/0 (0%)</div>
         </div>
-        <div id="helpBtn" class="hideable" title="Нажмите для помощи">?</div>
-        <div id="historyPanel" class="hidden">
-            <ul id="historyList"></ul>
-            <button id="closeHistory">Закрыть</button>
+
+        <!-- Help Button -->
+        <div id="helpBtn" class="help-btn hideable" title="Помощь">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/>
+            </svg>
+        </div>
+
+        <!-- History Panel -->
+        <div id="historyPanel" class="history-panel hidden">
+            <div class="history-header">
+                <h3>История сессий</h3>
+                <button id="closeHistory" class="close-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                    </svg>
+                </button>
+            </div>
+            <ul id="historyList" class="history-list"></ul>
         </div>
     </div>
+
+    <!-- Navigation Footer -->
+    <footer class="footer">
+        <nav class="footer-nav">
+            <a href="index.html" class="nav-item active">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                </svg>
+                <span>Таймер</span>
+            </a>
+            <a href="history.html" class="nav-item">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/>
+                </svg>
+                <span>История</span>
+            </a>
+        </nav>
+    </footer>
+
     <script src="scripts.js"></script>
 </body>
 </html>

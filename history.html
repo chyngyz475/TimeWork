@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#6366f1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>История - TimeWork</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="background-glow"></div>
+    <canvas id="particleCanvas"></canvas>
+    
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <h1 class="app-title">История работы</h1>
+            <div class="status-indicator">
+                <span id="currentDate"></span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container history-container">
+        <!-- Daily Stats -->
+        <div class="daily-stats">
+            <div class="stat-card">
+                <div class="stat-icon work-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value" id="workSessions">0</div>
+                    <div class="stat-label">Сессий работы</div>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon break-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value" id="breakSessions">0</div>
+                    <div class="stat-label">Сессий отдыха</div>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon time-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/>
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value" id="totalWorkTime">0ч 0м</div>
+                    <div class="stat-label">Общее время работы</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Session History -->
+        <div class="session-history">
+            <div class="section-header">
+                <h2>Сессии за сегодня</h2>
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-filter="all">Все</button>
+                    <button class="filter-btn" data-filter="work">Работа</button>
+                    <button class="filter-btn" data-filter="break">Отдых</button>
+                </div>
+            </div>
+            
+            <div class="sessions-list" id="sessionsList">
+                <!-- Sessions will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Weekly Overview -->
+        <div class="weekly-overview">
+            <h2>Обзор недели</h2>
+            <div class="week-chart" id="weekChart">
+                <!-- Weekly chart will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Footer -->
+    <footer class="footer">
+        <nav class="footer-nav">
+            <a href="index.html" class="nav-item">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                </svg>
+                <span>Таймер</span>
+            </a>
+            <a href="history.html" class="nav-item active">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/>
+                </svg>
+                <span>История</span>
+            </a>
+        </nav>
+    </footer>
+
+    <script src="history.js"></script>
+</body>
+</html>
+
+
