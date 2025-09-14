@@ -69,6 +69,11 @@ function updateTimer() {
             }
         }
         
+        // Показываем уведомление о завершении
+        if (window.notificationManager) {
+            window.notificationManager.notifyTimerEnd();
+        }
+        
         if (isPomodoro) {
             currentPhase = currentPhase === "work" ? "break" : "work";
             timeLeft = currentPhase === "work" ? workTime : breakTime;
@@ -80,7 +85,20 @@ function updateTimer() {
             sessionStartTime = Date.now();
             totalSessionTime = 0;
             
-            alert(`Перерыв! (${currentPhase === "work" ? "Работа" : "Отдых"} начинается)`);
+            // Показываем уведомление о смене фазы
+            if (window.notificationManager) {
+                if (currentPhase === "work") {
+                    window.notificationManager.notifyWorkStart();
+                } else {
+                    window.notificationManager.notifyBreakStart();
+                }
+            }
+            
+            // Проверяем кастомные циклы
+            if (window.customTimerManager && window.customTimerManager.isCustomMode) {
+                window.customTimerManager.nextCycle();
+            }
+            
         } else {
             clearInterval(timerId);
             timerId = null;
@@ -97,7 +115,6 @@ function updateTimer() {
             document.getElementById("startButton").classList.remove("shifted");
             showHideableElements();
             updatePhaseIndicator();
-            alert("Таймер закончен!");
             return;
         }
     }
@@ -324,6 +341,16 @@ function addTask(text) {
                 li.remove();
                 updateTaskProgress();
                 history.push({ text, completed: true, time: new Date().toLocaleString() });
+                
+                // Показываем уведомление о выполнении задачи
+                if (window.notificationManager) {
+                    window.notificationManager.notifyTaskCompleted(text);
+                }
+                
+                // Обновляем статистику пользователя
+                if (window.updateUserStats) {
+                    window.updateUserStats();
+                }
             }, 500);
         }
     });

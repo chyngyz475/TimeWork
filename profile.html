@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#6366f1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Профиль - TimeWork</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="background-glow"></div>
+    <canvas id="particleCanvas"></canvas>
+    
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <h1 class="app-title">Профиль</h1>
+            <div class="status-indicator">
+                <span id="userLevel">Новичок</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container profile-container">
+        <!-- User Info Card -->
+        <div class="user-card">
+            <div class="user-avatar">
+                <div class="avatar-circle">
+                    <span id="userInitials">U</span>
+                </div>
+                <div class="level-badge" id="levelBadge">1</div>
+            </div>
+            <div class="user-info">
+                <h2 id="userName">Пользователь</h2>
+                <p id="userEmail">user@example.com</p>
+                <div class="user-stats">
+                    <div class="stat-item">
+                        <span class="stat-number" id="totalSessions">0</span>
+                        <span class="stat-label">Сессий</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="totalHours">0ч</span>
+                        <span class="stat-label">Часов</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="totalTasks">0</span>
+                        <span class="stat-label">Задач</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Weekly Stats -->
+        <div class="stats-section">
+            <h3>Статистика за неделю</h3>
+            <div class="weekly-stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon focus-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        </svg>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-value" id="weeklyFocusHours">0ч 0м</div>
+                        <div class="stat-label">В фокусе</div>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon task-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                        </svg>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-value" id="weeklyCompletedTasks">0</div>
+                        <div class="stat-label">Задач выполнено</div>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon streak-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/>
+                        </svg>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-value" id="currentStreak">0</div>
+                        <div class="stat-label">Дней подряд</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI Assistant -->
+        <div class="ai-assistant-section">
+            <h3>AI Помощник</h3>
+            <div class="ai-card">
+                <div class="ai-avatar">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                    </svg>
+                </div>
+                <div class="ai-content">
+                    <div class="ai-message" id="aiMessage">
+                        Привет! Я проанализировал твою активность. Рекомендую сделать 15-минутный перерыв после следующей сессии.
+                    </div>
+                    <div class="ai-actions">
+                        <button class="ai-btn" id="askAI">Спросить AI</button>
+                        <button class="ai-btn secondary" id="analyzePattern">Анализ графика</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gamification -->
+        <div class="gamification-section">
+            <h3>Твой сад</h3>
+            <div class="garden-container">
+                <div class="garden-grid" id="gardenGrid">
+                    <!-- Trees will be generated here -->
+                </div>
+                <div class="garden-stats">
+                    <div class="garden-stat">
+                        <span class="garden-number" id="totalTrees">0</span>
+                        <span class="garden-label">Деревьев</span>
+                    </div>
+                    <div class="garden-stat">
+                        <span class="garden-number" id="forestLevel">1</span>
+                        <span class="garden-label">Уровень леса</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings -->
+        <div class="settings-section">
+            <h3>Настройки</h3>
+            <div class="settings-grid">
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h4>Фоновые звуки</h4>
+                        <p>Белый шум, кафе, дождь</p>
+                    </div>
+                    <button class="setting-toggle" id="soundToggle">
+                        <span class="toggle-slider"></span>
+                    </button>
+                </div>
+                
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h4>Уведомления</h4>
+                        <p>Звук и popup</p>
+                    </div>
+                    <button class="setting-toggle" id="notificationToggle">
+                        <span class="toggle-slider"></span>
+                    </button>
+                </div>
+                
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h4>Синхронизация</h4>
+                        <p>Сохранение в облаке</p>
+                    </div>
+                    <button class="setting-toggle" id="syncToggle">
+                        <span class="toggle-slider"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Footer -->
+    <footer class="footer">
+        <nav class="footer-nav">
+            <a href="index.html" class="nav-item">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                </svg>
+                <span>Таймер</span>
+            </a>
+            <a href="history.html" class="nav-item">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/>
+                </svg>
+                <span>История</span>
+            </a>
+            <a href="profile.html" class="nav-item active">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                </svg>
+                <span>Профиль</span>
+            </a>
+        </nav>
+    </footer>
+
+    <script src="profile.js"></script>
+</body>
+</html>
